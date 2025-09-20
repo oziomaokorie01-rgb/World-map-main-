@@ -3,301 +3,231 @@
 <head>
   <meta charset="UTF-8">
   <title>Espresso Systems World Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-</head>
+  <style>
 :root{
-    --chocolate:#6b3e2e;
-      --cookie:#d2b48c;
-        --vanilla:#f3e5ab;
-          --header-bg:linear-gradient(90deg,#6b3e2e,#d2b48c);
-            --card-bg:#fff8dc;
-              --body-bg:#fbe9dd;
-                --muted:#8a5b47;
-                }
-                body{
-                  margin:0;
-                    font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
-                      background:var(--body-bg); /* Vanilla/cookie */
-                        color:#6b3e2e;
-                        }
-                        #header{
-                          display:flex;
-                            align-items:center;
-                              padding:20px 28px 10px 28px;
-                                background:var(--header-bg);
-                                  box-shadow:0 2px 8px rgba(0,0,0,0.18);
-                                  }
-                                  .logo{
-                                    width:40px;height:40px;margin-right:16px;border-radius:8px;object-fit:contain;
-                                    }
-                                    .title{
-                                      font-size:22px;
-                                        font-weight:bold;
-                                          letter-spacing:1px;
-                                            color:var(--chocolate);
-                                            }
-                                            #map{
-                                              width:100vw;
-                                                height:480px;
-                                                  border-bottom:1px solid #d2b48c;
-                                                    box-shadow:0 4px 16px rgba(0,0,0,0.13);
-                                                      margin-bottom:0;
-                                                        border-radius:12px;
-                                                        }
-                                                        .nav-buttons{
-                                                          text-align:center;
-                                                            margin:18px 0 2px 0;
-                                                            }
-                                                            .nav-buttons button{
-                                                              background:var(--chocolate);
-                                                                color:#fff;
-                                                                  border:none;
-                                                                    padding:8px 20px;
-                                                                      margin:0 8px;
-                                                                        border-radius:6px;
-                                                                          font-size:17px;
-                                                                            cursor:pointer;
-                                                                              transition:background 0.2s;
-                                                                                box-shadow:0 2px 6px rgba(0,0,0,0.15);
-                                                                                }
-                                                                                .nav-buttons button:hover{
-                                                                                  background:var(--cookie);
-                                                                                    color:var(--chocolate);
-                                                                                    }
-                                                                                    .event-cards{
-                                                                                      display:flex;
-                                                                                        justify-content:center;
-                                                                                          flex-wrap:wrap;
-                                                                                            gap:16px;
-                                                                                              padding:12px 0 32px 0;
-                                                                                                background:var(--vanilla); /* Vanilla for event card area */
-                                                                                                }
-                                                                                                .event-card{
-                                                                                                  background:var(--card-bg); /* Vanilla/cookie */
-                                                                                                    color:var(--chocolate);
-                                                                                                      border-radius:10px;
-                                                                                                        box-shadow:0 2px 8px rgba(0,0,0,0.13);
-                                                                                                          padding:16px;
-                                                                                                            width:220px;
-                                                                                                              min-height:260px;
-                                                                                                                text-align:left;
-                                                                                                                  transition:box-shadow 0.2s,border 0.2s;
-                                                                                                                    cursor:pointer;
-                                                                                                                      border:1px solid var(--cookie);
-                                                                                                                      }
-                                                                                                                      .event-card.selected{
-                                                                                                                        box-shadow:0 0 0 3px var(--muted);
-                                                                                                                          border:1.5px solid var(--muted);
-                                                                                                                          }
-                                                                                                                          .event-card h4{
-                                                                                                                            margin:0 0 8px 0;
-                                                                                                                              color:var(--chocolate);
-                                                                                                                                font-size:18px;
-                                                                                                                                  font-weight:bold;
-                                                                                                                                  }
-                                                                                                                                  .event-card img{
-                                                                                                                                    border-radius:7px;
-                                                                                                                                      width:100%;
-                                                                                                                                        margin:10px 0 7px 0;
-                                                                                                                                          background:var(--vanilla);
-                                                                                                                                            box-shadow:0 1px 5px rgba(0,0,0,0.08);
-                                                                                                                                            }
-                                                                                                                                            .event-card .desc{
-                                                                                                                                              font-size:14px;
-                                                                                                                                                color:var(--muted);
-                                                                                                                                                  margin-top:6px;
-                                                                                                                                                  }
-                                                                                                                                                  .leaflet-popup-content img{
-                                                                                                                                                    max-width:180px;
-                                                                                                                                                      border-radius:5px;
-                                                                                                                                                        margin-bottom:6px;
-                                                                                                                                                          background:var(--vanilla);
-                                                                                                                                                          }
-                                                                                                                                                          @media(max-width:880px){
-                                                                                                                                                            #map{height:340px;}
-                                                                                                                                                              .event-card{width:48%;}
-                                                                                                                                                              }
-                                                                                                                                                              @media(max-width:480px){
-                                                                                                                                                                #header{padding:10px;}
-                                                                                                                                                                  .logo{width:30px;height:30px;}
-                                                                                                                                                                    .title{font-size:16px;}
-                                                                                                                                                                      #map{height:220px;}
-                                                                                                                                                                        .event-card{width:100%;}
-                                                                                                                                                                        }
+  --chocolate:#6b3e2e;
+  --cookie:#d2b48c;
+  --vanilla:#f3e5ab;
+  --header-bg:linear-gradient(90deg,#6b3e2e,#d2b48c);
+  --card-bg:#fff8dc;
+  --body-bg:#fbe9dd;
+  --muted:#8a5b47;
 }
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--body-bg);
+  color:#6b3e2e;
+}
+#header{
+  display:flex;
+  align-items:center;
+  padding:20px 28px 10px 28px;
+  background:var(--header-bg);
+  box-shadow:0 2px 8px rgba(0,0,0,0.18);
+}
+.logo{
+  width:40px;height:40px;margin-right:16px;border-radius:8px;object-fit:contain;
+}
+.title{
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:1px;
+  color:var(--chocolate);
+}
+#map{
+  width:100vw;
+  height:480px;
+  border-bottom:1px solid #d2b48c;
+  box-shadow:0 4px 16px rgba(0,0,0,0.13);
+  margin-bottom:0;
+  border-radius:12px;
+}
+.nav-buttons{
+  text-align:center;
+  margin:18px 0 2px 0;
+}
+.nav-buttons button{
+  background:var(--chocolate);
+  color:#fff;
+  border:none;
+  padding:8px 20px;
+  margin:0 8px;
+  border-radius:6px;
+  font-size:17px;
+  cursor:pointer;
+  transition:background 0.2s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+.nav-buttons button:hover{
+  background:var(--cookie);
+  color:var(--chocolate);
+}
+.event-cards{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:16px;
+  padding:12px 0 32px 0;
+  background:var(--vanilla);
+}
+.event-card{
+  background:var(--card-bg);
+  color:var(--chocolate);
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.13);
+  padding:16px;
+  width:220px;
+  min-height:260px;
+  text-align:left;
+  transition:box-shadow 0.2s,border 0.2s;
+  cursor:pointer;
+  border:1px solid var(--cookie);
+}
+.event-card.selected{
+  box-shadow:0 0 0 3px var(--muted);
+  border:1.5px solid var(--muted);
+}
+.event-card h4{
+  margin:0 0 8px 0;
+  color:var(--chocolate);
+  font-size:18px;
+  font-weight:bold;
+}
+.event-card img{
+  border-radius:7px;
+  width:100%;
+  margin:10px 0 7px 0;
+  background:var(--vanilla);
+  box-shadow:0 1px 5px rgba(0,0,0,0.08);
+}
+.event-card .desc{
+  font-size:14px;
+  color:var(--muted);
+  margin-top:6px;
+}
+.leaflet-popup-content img{
+  max-width:180px;
+  border-radius:5px;
+  margin-bottom:6px;
+  background:var(--vanilla);
+}
+@media(max-width:880px){
+  #map{height:340px;}
+  .event-card{width:48%;}
+}
+@media(max-width:480px){
+  #header{padding:10px;}
+  .logo{width:30px;height:30px;}
+  .title{font-size:16px;}
+  #map{height:220px;}
+  .event-card{width:100%;}
+}
+  </style>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
 <body>
   <div id="header">
-    <img src="images/logo.png" alt="Logo" class="logo">
-    <div class="title">Espresso Systems World Map</div>
+    <img class="logo" src="images/logo.png" alt="Logo" />
+    <span class="title">Espresso Systems World Map</span>
   </div>
   <div id="map"></div>
   <div class="nav-buttons">
     <button onclick="prevEvent()">← Previous</button>
     <button onclick="nextEvent()">Next →</button>
   </div>
-  <div class="event-cards" id="eventCards"></div>
+  <div class="event-cards" id="eventCards">
+    <!-- Event cards will be injected by JS -->
+  </div>
   <script>
-    // Event data: name, city, date, image, description, type
+    // Example data for 3 events
     const events = [
       {
         name: "Composability Day",
         city: "Denver, USA",
         date: "Feb 2024",
+        desc: "A day focused on blockchain composability.",
         img: "images/denver.png",
-        type: "past",
-        coords: [39.7392,-104.9903],
-        desc: "An afternoon event where we discussed all things composability."
+        latlng: [39.7392, -104.9903]
       },
       {
-        name: "Espresso Brews",
+        name: "San Francisco Meetup",
         city: "San Francisco, USA",
-        date: "March 2024",
-        img: "images/san-francisco.png",
-        type: "past",
-        coords: [37.7749,-122.4194],
-        desc: "With Electric Capital during ETHSF week."
-      },
-      {
-        name: "Mainnet Speech",
-        city: "New York, USA",
-        date: "April 2024",
-        img: "images/new-york.png",
-        type: "past",
-        coords: [40.7128,-74.0060],
-        desc: "Espresso CEO Benafisch speaking at mainnet in New York."
-      },
-      {
-        name: "Crypto Cannes",
-        city: "Cannes, France",
         date: "May 2024",
-        img: "images/cannes.png",
-        type: "past",
-        coords: [43.5528,7.0174],
-        desc: "Espresso in Cannes with pétanque tourney and crypto chats."
+        desc: "Meetup for Espresso Systems enthusiasts.",
+        img: "images/san-francisco.png",
+        latlng: [37.7749, -122.4194]
       },
       {
-        name: "Back to Future",
-        city: "Bangkok, Thailand",
-        date: "June 2024",
-        img: "images/bangkok.png",
-        type: "past",
-        coords: [13.7563,100.5018],
-        desc: "Back to the Future event in Bangkok featuring Cartesi + Espresso apps."
-      },
-      {
-        name: "EthCC Brussels",
-        city: "Brussels, Belgium",
-        date: "July 2024",
-        img: "images/brussels.png",
-        type: "past",
-        coords: [50.8503,4.3517],
-        desc: "Cartesi x Espresso at EthCC Brussels exploring modular blockchain futures."
-      },
-      {
-        name: "ETHBerlin Judge",
-        city: "Berlin, Germany",
-        date: "Aug 2024",
-        img: "images/berlin.png",
-        type: "past",
-        coords: [52.5200,13.4050],
-        desc: "Espresso Systems Product Manager judging at ETHBerlin."
-      },
-      {
-        name: "Seoul Meetup",
-        city: "Seoul, South Korea",
-        date: "Sept 2025",
-        img: "images/seoul.png",
-        type: "future",
-        coords: [37.5665,126.9780],
-        desc: "Espresso happy hour in Seoul with swag and top-secret drop."
-      },
-      {
-        name: "Buenos Aires Meetup",
-        city: "Buenos Aires, Argentina",
-        date: "Sept 2025",
-        img: "images/buenos-aires.png",
-        type: "future",
-        coords: [-34.6037,-58.3816],
-        desc: "Future Espresso meetup in Buenos Aires (details coming soon)."
+        name: "NYC Blockchain Expo",
+        city: "New York, USA",
+        date: "Sep 2024",
+        desc: "Blockchain expo in New York City.",
+        img: "images/new-york.png",
+        latlng: [40.7128, -74.0060]
       }
     ];
 
-    // Custom 15x15px icons
-    const pastIcon = L.icon({
-      iconUrl: 'images/past.png',
-      iconSize: [15, 15]
-    });
-    const futureIcon = L.icon({
-      iconUrl: 'images/future.png',
-      iconSize: [15, 15]
-    });
+    let map;
+    let markers = [];
+    let selectedIndex = 0;
 
-    // Map setup (dark theme)
-    const map = L.map('map').setView([20, 0], 2);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
-    }).addTo(map);
+    function initMap() {
+      map = L.map('map').setView([39.5, -98.35], 4);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Leaflet | © OSM'
+      }).addTo(map);
 
-    // Marker and event popup logic
-    let markers = [], currentIndex = 0;
-    events.forEach((ev,i) => {
-      const icon = ev.type === "past" ? pastIcon : futureIcon;
-      const marker = L.marker(ev.coords, {icon})
-        .bindPopup(`
-          <b>${ev.name}</b> <br>
-          <small>${ev.city}, ${ev.date}</small><br>
-          <img src="${ev.img}" alt="${ev.name}"><br>
-          <span style="color:#bbb;font-size:13px;">${ev.desc}</span>
-        `)
-        .addTo(map);
-      markers.push(marker);
-    });
-
-    // Event cards below map
-    function renderCards(selectedIdx) {
-      const container = document.getElementById("eventCards");
-      container.innerHTML = "";
-      events.forEach((ev, i) => {
-        container.innerHTML += `
-          <div class="event-card${selectedIdx===i?' selected':''}" id="event-card-${i}">
-            <h4>${ev.name}</h4>
-            <div><b>City:</b> ${ev.city}</div>
-            <div><b>Date:</b> ${ev.date}</div>
-            <img src="${ev.img}" alt="${ev.name}">
-            <div class="desc">${ev.desc}</div>
-          </div>
-        `;
+      events.forEach((event, i) => {
+        const marker = L.marker(event.latlng).addTo(map);
+        marker.on('click', () => selectEvent(i));
+        marker.bindPopup(`<b>${event.name}</b><br>${event.city}<br><img src="${event.img}" alt="${event.name}" />`);
+        markers.push(marker);
       });
     }
 
-    // Navigation logic
-    function showEvent(idx) {
-      if (idx < 0) idx = events.length - 1;
-      if (idx >= events.length) idx = 0;
-      currentIndex = idx;
-      map.setView(events[currentIndex].coords, 4);
-      markers[currentIndex].openPopup();
-      renderCards(currentIndex);
-      // Scroll event card into view for accessibility
-      setTimeout(() => {
-        const el = document.getElementById(`event-card-${currentIndex}`);
-        if (el) el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-      }, 100);
+    function renderCards() {
+      const container = document.getElementById('eventCards');
+      container.innerHTML = '';
+      events.forEach((event, i) => {
+        const card = document.createElement('div');
+        card.className = "event-card" + (selectedIndex === i ? " selected" : "");
+        card.onclick = () => selectEvent(i);
+        card.innerHTML = `
+          <h4>${event.name}</h4>
+          <img src="${event.img}" alt="${event.name}" />
+          <div><strong>City:</strong> ${event.city}</div>
+          <div><strong>Date:</strong> ${event.date}</div>
+          <div class="desc">${event.desc}</div>
+        `;
+        container.appendChild(card);
+      });
     }
-    function prevEvent() { showEvent(currentIndex-1); }
-    function nextEvent() { showEvent(currentIndex+1); }
-    renderCards(currentIndex);
-    showEvent(currentIndex);
 
-    // Optional: clicking event card opens popup and centers map
-    document.getElementById("eventCards").addEventListener("click", (e) => {
-      const card = e.target.closest(".event-card");
-      if (!card) return;
-      const idx = Array.from(document.getElementsByClassName("event-card")).indexOf(card);
-      if (idx >= 0) showEvent(idx);
-    });
+    function selectEvent(idx) {
+      selectedIndex = idx;
+      renderCards();
+      map.setView(events[idx].latlng, 6);
+      markers[idx].openPopup();
+    }
+
+    function prevEvent() {
+      selectedIndex = (selectedIndex - 1 + events.length) % events.length;
+      selectEvent(selectedIndex);
+    }
+    function nextEvent() {
+      selectedIndex = (selectedIndex + 1) % events.length;
+      selectEvent(selectedIndex);
+    }
+
+    window.onload = () => {
+      initMap();
+      renderCards();
+      selectEvent(0); // Select first event by default
+    };
   </script>
 </body>
 </html>
