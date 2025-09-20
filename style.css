@@ -1,6 +1,55 @@
-/* --- Existing code above --- */
+:root{
+  --espresso-dark: #6b3e2e;      /* chocolate */
+  --espresso-mid: #d2b48c;       /* cookie/tan */
+  --bg: #fbe9dd;                 /* vanilla/cookie for page background */
+  --card: #fff8dc;               /* vanilla for cards */
+  --muted: #8a5b47;              /* mid cookie/chocolate */
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--espresso-dark);
+}
+.site-header{
+  background:linear-gradient(90deg,var(--espresso-dark),var(--espresso-mid));
+  padding:16px 0;
+  box-shadow:0 4px 18px rgba(0,0,0,0.16)
+}
+.header-inner{
+  width:94%;max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:14px;justify-content:center
+}
+.logo{
+  width:48px;height:48px;object-fit:contain;border-radius:8px
+}
+.site-header h1{
+  color:var(--card);
+  font-size:20px;
+  margin:0;
+  font-weight:700
+}
 
-/* Navigation buttons below map */
+/* map */
+#map-wrap{width:94%;max-width:1200px;margin:18px auto}
+#map{
+  height:560px;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08)
+}
+
+/* legend style */
+.leaflet-control-layers, .legend-box{
+  background:rgba(255,248,220,0.97);
+  color:var(--espresso-dark);
+  border-radius:8px;
+  padding:8px;
+  font-size:13px
+}
+
+/* navigation buttons below map */
 .nav-buttons {
   width:94%;
   max-width:1200px;
@@ -9,7 +58,7 @@
 }
 .nav-buttons button {
   background:var(--espresso-dark);
-  color:#fff;
+  color:var(--card);
   border:none;
   padding:8px 24px;
   margin:0 8px;
@@ -17,14 +66,74 @@
   font-size:17px;
   font-family:inherit;
   cursor:pointer;
-  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
   transition:background 0.18s;
 }
 .nav-buttons button:hover {
   background:var(--espresso-mid);
+  color:var(--espresso-dark);
 }
 
-/* Highlight selected event card */
+/* cards */
+.cards-wrapper{
+  width:94%;
+  max-width:1200px;
+  margin:18px auto 60px;
+}
+.cards-inner{display:block}
+.cards-section h2{
+  color:var(--espresso-mid);
+  margin:6px 0 10px;
+  font-size:18px;
+  text-align:left
+}
+.sep{
+  border:0;
+  border-top:1px solid rgba(107,62,46,0.07);
+  margin:12px 0
+}
+.cards-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px
+}
+.event-cards{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:16px;
+  padding:12px 0 32px 0;
+  background:var(--card);
+}
+.event-card{
+  background:var(--card);
+  border-radius:10px;
+  width:240px;
+  padding:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.05);
+  cursor:pointer;
+  border:1px solid var(--espresso-mid);
+  color:var(--espresso-dark);
+}
+.event-card img{
+  width:100%;
+  height:130px;
+  object-fit:cover;
+  border-radius:8px;
+  background:var(--bg);
+  box-shadow:0 1px 5px rgba(0,0,0,0.09);
+}
+.event-card h3, .event-card h4{
+  margin:8px 0 6px;
+  font-size:16px;
+  color:var(--espresso-mid);
+}
+.event-card p, .event-card .desc{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  min-height:44px
+}
 .event-card.selected {
   border:2px solid var(--espresso-mid);
   box-shadow:0 0 0 2px var(--espresso-mid);
@@ -36,12 +145,18 @@
   border-radius:7px;
   margin-bottom:7px;
   background:var(--bg);
-  box-shadow:0 1px 5px rgba(0,0,0,0.13);
+  box-shadow:0 1px 5px rgba(0,0,0,0.09);
 }
 
-/* (Optional) Smooth scroll for card selection */
-.event-card:focus {
-  outline:2px solid var(--espresso-mid);
+/* responsive */
+@media(max-width:880px){
+  #map{height:440px}
+  .event-card{width:48%}
 }
-
-/* --- End additions --- */
+@media(max-width:480px){
+  .header-inner{padding:0 10px}
+  .logo{width:40px;height:40px}
+  .site-header h1{font-size:18px}
+  #map{height:360px}
+  .event-card{width:100%}
+}
