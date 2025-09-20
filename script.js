@@ -3,7 +3,7 @@ const events = [
   {
     name: "Composability Day",
     city: "Denver, USA",
-    date: "Feb 2024",
+    date: "Feb 2025",
     img: "images/denver.png",
     type: "past",
     coords: [39.7392,-104.9903],
@@ -30,7 +30,7 @@ const events = [
   {
     name: "Crypto Cannes",
     city: "Cannes, France",
-    date: "May 2024",
+    date: "July 2025",
     img: "images/cannes.png",
     type: "past",
     coords: [43.5528,7.0174],
@@ -86,11 +86,11 @@ const events = [
 // Custom 10x10px icons
 const pastIcon = L.icon({
   iconUrl: 'images/past.png',
-  iconSize: [10, 10]
+  iconSize: [15, 15]
 });
 const futureIcon = L.icon({
   iconUrl: 'images/future.png',
-  iconSize: [10, 10]
+  iconSize: [15, 15]
 });
 
 // Map setup (dark theme)
