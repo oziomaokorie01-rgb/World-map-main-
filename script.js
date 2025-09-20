@@ -86,11 +86,11 @@ const events = [
 // Custom 10x10px icons
 const pastIcon = L.icon({
   iconUrl: 'images/past.png',
-  iconSize: [15, 15]
+  iconSize: [20, 20]
 });
 const futureIcon = L.icon({
   iconUrl: 'images/future.png',
-  iconSize: [15, 15]
+  iconSize: [20, 20]
 });
 
 // Map setup (dark theme)
