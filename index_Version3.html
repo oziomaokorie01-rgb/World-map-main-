@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Espresso Systems World Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #181818;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+    #header {
+      display: flex;
+      align-items: center;
+      padding: 20px 28px 10px 28px;
+      background: #232323;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .logo {
+      width: 40px;
+      height: 40px;
+      margin-right: 16px;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    #map {
+      width: 100vw;
+      height: 480px;
+      border-bottom: 1px solid #333;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .nav-buttons {
+      text-align: center;
+      margin: 18px 0 2px 0;
+    }
+    .nav-buttons button {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      margin: 0 8px;
+      border-radius: 6px;
+      font-size: 17px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-buttons button:hover {
+      background: #444;
+    }
+    .event-cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 12px 0 32px 0;
+      background: #181818;
+    }
+    .event-card {
+      background: #232323;
+      color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      padding: 16px;
+      width: 220px;
+      min-height: 260px;
+      text-align: left;
+      transition: box-shadow 0.2s;
+    }
+    .event-card.selected {
+      box-shadow: 0 0 0 3px #00c3ff;
+      border: 1.5px solid #00c3ff;
+    }
+    .event-card h4 {
+      margin: 0 0 8px 0;
+      color: #00c3ff;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .event-card img {
+      border-radius: 7px;
+      width: 100%;
+      margin: 10px 0 7px 0;
+      background: #111;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.13);
+    }
+    .event-card .desc {
+      font-size: 14px;
+      color: #bbb;
+      margin-top: 6px;
+    }
+    .leaflet-popup-content img {
+      max-width: 180px;
+      border-radius: 5px;
+      margin-bottom: 6px;
+      background: #111;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <img src="images/logo.png" alt="Logo" class="logo">
+    <div class="title">Espresso Systems World Map</div>
+  </div>
+  <div id="map"></div>
+  <div class="nav-buttons">
+    <button onclick="prevEvent()">← Previous</button>
+    <button onclick="nextEvent()">Next →</button>
+  </div>
+  <div class="event-cards" id="eventCards"></div>
+  <script>
+    // Event data: name, city, date, image, description, type
+    const events = [
+      {
+        name: "Composability Day",
+        city: "Denver, USA",
+        date: "Feb 2024",
+        img: "images/denver.png",
+        type: "past",
+        coords: [39.7392,-104.9903],
+        desc: "An afternoon event where we discussed all things composability."
+      },
+      {
+        name: "Espresso Brews",
+        city: "San Francisco, USA",
+        date: "March 2024",
+        img: "images/san-francisco.png",
+        type: "past",
+        coords: [37.7749,-122.4194],
+        desc: "With Electric Capital during ETHSF week."
+      },
+      {
+        name: "Mainnet Speech",
+        city: "New York, USA",
+        date: "April 2024",
+        img: "images/new-york.png",
+        type: "past",
+        coords: [40.7128,-74.0060],
+        desc: "Espresso CEO Benafisch speaking at mainnet in New York."
+      },
+      {
+        name: "Crypto Cannes",
+        city: "Cannes, France",
+        date: "May 2024",
+        img: "images/cannes.png",
+        type: "past",
+        coords: [43.5528,7.0174],
+        desc: "Espresso in Cannes with pétanque tourney and crypto chats."
+      },
+      {
+        name: "Back to Future",
+        city: "Bangkok, Thailand",
+        date: "June 2024",
+        img: "images/bangkok.png",
+        type: "past",
+        coords: [13.7563,100.5018],
+        desc: "Back to the Future event in Bangkok featuring Cartesi + Espresso apps."
+      },
+      {
+        name: "EthCC Brussels",
+        city: "Brussels, Belgium",
+        date: "July 2024",
+        img: "images/brussels.png",
+        type: "past",
+        coords: [50.8503,4.3517],
+        desc: "Cartesi x Espresso at EthCC Brussels exploring modular blockchain futures."
+      },
+      {
+        name: "ETHBerlin Judge",
+        city: "Berlin, Germany",
+        date: "Aug 2024",
+        img: "images/berlin.png",
+        type: "past",
+        coords: [52.5200,13.4050],
+        desc: "Espresso Systems Product Manager judging at ETHBerlin."
+      },
+      {
+        name: "Seoul Meetup",
+        city: "Seoul, South Korea",
+        date: "Sept 2025",
+        img: "images/seoul.png",
+        type: "future",
+        coords: [37.5665,126.9780],
+        desc: "Espresso happy hour in Seoul with swag and top-secret drop."
+      },
+      {
+        name: "Buenos Aires Meetup",
+        city: "Buenos Aires, Argentina",
+        date: "Sept 2025",
+        img: "images/buenos-aires.png",
+        type: "future",
+        coords: [-34.6037,-58.3816],
+        desc: "Future Espresso meetup in Buenos Aires (details coming soon)."
+      }
+    ];
+
+    // Custom 10x10px icons
+    const pastIcon = L.icon({
+      iconUrl: 'images/past.png',
+      iconSize: [10, 10]
+    });
+    const futureIcon = L.icon({
+      iconUrl: 'images/future.png',
+      iconSize: [10, 10]
+    });
+
+    // Map setup (dark theme)
+    const map = L.map('map').setView([20, 0], 2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+    }).addTo(map);
+
+    // Marker and event popup logic
+    let markers = [], currentIndex = 0;
+    events.forEach((ev,i) => {
+      const icon = ev.type === "past" ? pastIcon : futureIcon;
+      const marker = L.marker(ev.coords, {icon})
+        .bindPopup(`
+          <b>${ev.name}</b> <br>
+          <small>${ev.city}, ${ev.date}</small><br>
+          <img src="${ev.img}" alt="${ev.name}"><br>
+          <span style="color:#bbb;font-size:13px;">${ev.desc}</span>
+        `)
+        .addTo(map);
+      markers.push(marker);
+    });
+
+    // Event cards below map
+    function renderCards(selectedIdx) {
+      const container = document.getElementById("eventCards");
+      container.innerHTML = "";
+      events.forEach((ev, i) => {
+        container.innerHTML += `
+          <div class="event-card${selectedIdx===i?' selected':''}" id="event-card-${i}">
+            <h4>${ev.name}</h4>
+            <div><b>City:</b> ${ev.city}</div>
+            <div><b>Date:</b> ${ev.date}</div>
+            <img src="${ev.img}" alt="${ev.name}">
+            <div class="desc">${ev.desc}</div>
+          </div>
+        `;
+      });
+    }
+
+    // Navigation logic
+    function showEvent(idx) {
+      if (idx < 0) idx = events.length - 1;
+      if (idx >= events.length) idx = 0;
+      currentIndex = idx;
+      map.setView(events[currentIndex].coords, 4);
+      markers[currentIndex].openPopup();
+      renderCards(currentIndex);
+      // Scroll event card into view for accessibility
+      setTimeout(() => {
+        const el = document.getElementById(`event-card-${currentIndex}`);
+        if (el) el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+      }, 100);
+    }
+    function prevEvent() { showEvent(currentIndex-1); }
+    function nextEvent() { showEvent(currentIndex+1); }
+    renderCards(currentIndex);
+    showEvent(currentIndex);
+
+    // Optional: clicking event card opens popup and centers map
+    document.getElementById("eventCards").addEventListener("click", (e) => {
+      const card = e.target.closest(".event-card");
+      if (!card) return;
+      const idx = Array.from(document.getElementsByClassName("event-card")).indexOf(card);
+      if (idx >= 0) showEvent(idx);
+    });
+  </script>
+</body>
+</html>

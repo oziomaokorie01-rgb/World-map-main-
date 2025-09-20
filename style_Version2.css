@@ -1,0 +1,47 @@
+/* --- Existing code above --- */
+
+/* Navigation buttons below map */
+.nav-buttons {
+  width:94%;
+  max-width:1200px;
+  margin:10px auto 0;
+  text-align:center;
+}
+.nav-buttons button {
+  background:var(--espresso-dark);
+  color:#fff;
+  border:none;
+  padding:8px 24px;
+  margin:0 8px;
+  border-radius:7px;
+  font-size:17px;
+  font-family:inherit;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  transition:background 0.18s;
+}
+.nav-buttons button:hover {
+  background:var(--espresso-mid);
+}
+
+/* Highlight selected event card */
+.event-card.selected {
+  border:2px solid var(--espresso-mid);
+  box-shadow:0 0 0 2px var(--espresso-mid);
+}
+
+/* Popup image style (inside leaflet popup) */
+.leaflet-popup-content img {
+  max-width:180px;
+  border-radius:7px;
+  margin-bottom:7px;
+  background:var(--bg);
+  box-shadow:0 1px 5px rgba(0,0,0,0.13);
+}
+
+/* (Optional) Smooth scroll for card selection */
+.event-card:focus {
+  outline:2px solid var(--espresso-mid);
+}
+
+/* --- End additions --- */
